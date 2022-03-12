@@ -81,6 +81,7 @@ jobs:
       #----------------------------------------------          
       - name: Build to GitHub Actions
         run : |
+          poetry version patch
           poetry build
       - name: Save to Github Actions
         uses: actions/upload-artifact@v2

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "typer_demo"
-version = "0.1.0"
+version = "0.2.1"
 description = "typer cli demo"
 authors = ["Alex Pineda <alehpineda@google.com>"]
 license = "GPL v3"
