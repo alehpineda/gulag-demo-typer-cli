@@ -6,8 +6,8 @@ on:
       - master
 
 jobs:
-  flake8:
-    name: Flake8
+  cicd:
+    name: CI/CD
     runs-on: ubuntu-latest
     steps:
       #----------------------------------------------
@@ -51,12 +51,12 @@ jobs:
       - name: Install library
         run: poetry install --no-interaction
       #----------------------------------------------
-      #              run test suite
+      #              run flake8
       #----------------------------------------------
       - name: Lint with flake8
         run: |
           # stop the build if there are Python syntax errors or undefined names
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          poetry run flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
           # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
           mkdir -p reports/flake8
           poetry run flake8 . --count --exit-zero --max-complexity=10 --max-line-length=79 --statistics --format=html --htmldir=reports/flake8
@@ -65,6 +65,9 @@ jobs:
         with:
           name: flake8-coverage-report
           path: reports/flake8/
+      #----------------------------------------------
+      #              run pytest
+      #----------------------------------------------          
       - name: Test with pytest
         run: |
           poetry run py.test -v --cov --html=reports/pytest/report.html
@@ -73,6 +76,9 @@ jobs:
         with:
           name: pytest-coverage-report
           path: reports/pytest/
+      #----------------------------------------------
+      #              Build
+      #----------------------------------------------          
       - name: Build to GitHub Actions
         run : |
           poetry build
@@ -81,6 +87,9 @@ jobs:
         with:
           name: typer-demo-artifact
           path: dist/
+      #----------------------------------------------
+      #              Deploy
+      #----------------------------------------------          
       - name: Deploy to PyPI
         uses: conchylicultor/pypi-build-publish@v1
         with:
